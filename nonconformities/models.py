@@ -1,48 +1,56 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Incidencia(models.Model):
-    # Clave primaria 'id' es automática
-    descripcion = models.TextField()
-    fecha_creacion = models.DateTimeField(auto_now_add=True)
-    fecha_cierre = models.DateTimeField(null=True, blank=True)
-    usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='incidencias')
-    estado = models.ForeignKey('Estado', on_delete=models.SET_NULL, null=True)
+class Nonconformity(models.Model):
+    # La clave primaria 'id' es automática
+    description = models.TextField()
+    creation_date = models.DateTimeField(auto_now_add=True)
+    closure_date = models.DateTimeField(null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='nonconformities')
+    status = models.ForeignKey('Status', on_delete=models.SET_NULL, null=True)
     area = models.ForeignKey('Area', on_delete=models.SET_NULL, null=True)
-    codigo = models.CharField(max_length=50)
-    clasificacion = models.ForeignKey('Clasificacion', on_delete=models.SET_NULL, null=True)  # Nuevo campo
+    code = models.CharField(max_length=50)
+    severity = models.ForeignKey('Severity', on_delete=models.SET_NULL, null=True)  # Nuevo campo
+    category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True)  # Nuevo campo
 
     def __str__(self):
-        return f"{self.codigo} - {self.descripcion[:50]}"
+        return f"{self.code} - {self.description[:50]}"
 
-class LineaIncidencia(models.Model):
-    # Clave primaria 'id' es automática
-    incidencia = models.ForeignKey(Incidencia, related_name='lineas', on_delete=models.CASCADE)
-    descripcion_accion = models.TextField()
-    fecha = models.DateTimeField(auto_now_add=True)
-    usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+class NonconformityLine(models.Model):
+    # La clave primaria 'id' es automática
+    nonconformity = models.ForeignKey(Nonconformity, related_name='lines', on_delete=models.CASCADE)
+    action_description = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
-        return f"Acción {self.id} de Incidencia {self.incidencia.codigo}"
+        return f"Action {self.id} of Nonconformity {self.nonconformity.code}"
 
-class Estado(models.Model):
+class Status(models.Model):
     id = models.AutoField(primary_key=True, db_column='Es_Id')
-    descripcion = models.CharField(max_length=50, db_column='Es_Descripcion')
+    description = models.CharField(max_length=50, db_column='Es_Descripcion')
 
     def __str__(self):
-        return self.descripcion
+        return self.description
 
 class Area(models.Model):
     id = models.AutoField(primary_key=True, db_column='Area_Id')
-    descripcion = models.CharField(max_length=50, db_column='Area_Descripcion')
-    codificacion = models.CharField(max_length=10, db_column='Area_Codificacion')
+    description = models.CharField(max_length=50, db_column='Area_Descripcion')
+    codification = models.CharField(max_length=10, db_column='Area_Codificacion')
 
     def __str__(self):
-        return self.descripcion
+        return self.description
 
-class Clasificacion(models.Model):
+class Severity(models.Model):
     id = models.AutoField(primary_key=True)
-    descripcion = models.CharField(max_length=50)
+    description = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.descripcion
+        return self.description
+
+class Category(models.Model):
+    id = models.AutoField(primary_key=True)
+    description = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.description

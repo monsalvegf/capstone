@@ -1,27 +1,29 @@
 from django.contrib import admin
 
-# Register your models here.
+# Importa los modelos con los nuevos nombres en inglés
+from .models import Nonconformity, NonconformityLine, Status, Area, Severity, Category
 
-from .models import Incidencia, LineaIncidencia, Estado, Area, Clasificacion
+# Registro de modelos en el admin
+admin.site.register(Status)
+admin.site.register(Severity)
+admin.site.register(Category)
 
-# Resto del código...
-
-admin.site.register(Estado)
-admin.site.register(Area)
-admin.site.register(Clasificacion) 
-
+# Personalización de la vista de Area en el admin
 class AreaAdmin(admin.ModelAdmin):
-    list_display = ('descripcion', 'codificacion')
-    search_fields = ('descripcion', 'codificacion')
+    list_display = ('description', 'codification')
+    search_fields = ('description', 'codification')
 
-class LineaIncidenciaInline(admin.TabularInline):
-    model = LineaIncidencia
+admin.site.register(Area, AreaAdmin)
+
+# Inline para NonconformityLine en Nonconformity
+class NonconformityLineInline(admin.TabularInline):
+    model = NonconformityLine
     extra = 1
 
-class IncidenciaAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'descripcion', 'fecha_creacion', 'estado', 'area', 'clasificacion') 
-    list_filter = ('estado', 'area', 'clasificacion')  
-    inlines = [LineaIncidenciaInline]
+# Personalización de la vista de Nonconformity en el admin
+class NonconformityAdmin(admin.ModelAdmin):
+    list_display = ('code', 'description', 'creation_date', 'status', 'area', 'severity', 'category')
+    list_filter = ('status', 'area', 'severity', 'category')
+    inlines = [NonconformityLineInline]
 
-admin.site.register(Incidencia, IncidenciaAdmin)
-
+admin.site.register(Nonconformity, NonconformityAdmin)
