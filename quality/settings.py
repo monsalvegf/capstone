@@ -74,6 +74,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'quality.wsgi.application'
 
 
@@ -142,4 +143,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Configuración de autenticación
 LOGIN_URL = 'accounts:login'  # Nombre de la ruta de inicio de sesión
 LOGIN_REDIRECT_URL = 'nonconformities:nonconformity_list'  # Redirección después de iniciar sesión
-LOGOUT_REDIRECT_URL = 'home'  # Redirección después de cerrar sesión
+LOGOUT_REDIRECT_URL = '/'

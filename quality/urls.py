@@ -23,5 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', accounts_views.home_view, name='home'),
     path('accounts/', include('accounts.urls', namespace='accounts')),
+    path('accounts/', include('django.contrib.auth.urls')),  # Incluye las URLs de autenticación
     path('nonconformities/', include('nonconformities.urls', namespace='nonconformities')),
 ]

@@ -1,40 +1,40 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    {% load static %}
     <meta charset="UTF-8">
-    <title>{% block title %}Mi Aplicación{% endblock %}</title>
-    <!-- Enlace a archivos CSS -->
+    <title>{% block title %}Quality System{% endblock %}</title>
+    {% load static %}
+    <!-- Incluir tu archivo CSS personalizado -->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                {% if user.is_authenticated %}
-                    <li>Bienvenido, {{ user.username }}</li>
-                    <li><a href="{% url 'accounts:logout' %}">Cerrar Sesión</a></li>
-                {% else %}
-                    <li><a href="{% url 'accounts:login' %}">Iniciar Sesión</a></li>
-                {% endif %}
-            </ul>
-        </nav>
+    <!-- Encabezado -->
+    <header class="header">
+        <div class="header-left">
+            <!-- Puedes incluir tu logo aquí -->
+            <h1 class="logo">Quality System</h1>
+        </div>
+        <div class="header-right">
+            {% if user.is_authenticated %}
+                <span class="user-name">Bienvenido, {{ user.username }}</span>
+                <!-- Formulario para cerrar sesión mediante POST -->
+                <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-logout">Cerrar Sesión</button>
+                </form>
+            {% else %}
+                <!-- Enlace para iniciar sesión si el usuario no está autenticado -->
+                <a href="{% url 'login' %}" class="btn-login">Iniciar Sesión</a>
+            {% endif %}
+        </div>
     </header>
 
+    <!-- Contenido principal -->
     <main>
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
         {% block content %}{% endblock %}
     </main>
 
-    <footer>
-        <p>&copy; 2024 Mi Aplicación</p>
-    </footer>
+    <!-- Incluir tu archivo JS personalizado -->
+    <script src="{% static 'js/scripts.js' %}"></script>
 </body>
 </html>
-

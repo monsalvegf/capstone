@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de No Conformidades{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Barra superior con botones -->
+    <div class="top-bar">
+        <div class="top-bar-left">
+            <!-- Botón "Exportar" -->
+            <a href="{% url 'nonconformities:export' %}" class="btn">Exportar</a>
+        </div>
+    </div>
+
+    <!-- Tabla de no conformidades -->
+    <div class="table-responsive">
+        <table class="nonconformity-table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Fecha Apertura</th>
+                    <th>Descripción de la Incidencia</th>
+                    <th>Severidad</th>
+                    <th>Clasificación</th>
+                    <th>Estado</th>
+                </tr>
+                <!-- Fila para búsqueda y filtrado -->
+                <tr>
+                    <form method="get" id="filter-form">
+                        <th><input type="text" name="code" value="{{ request.GET.code }}"></th>
+                        <th><input type="date" name="creation_date" value="{{ request.GET.creation_date }}"></th>
+                        <th><input type="text" name="description" value="{{ request.GET.description }}"></th>
+                        <th>
+                            <select name="severity">
+                                <option value="">Todas</option>
+                                {% for severity in severities %}
+                                <option value="{{ severity.id }}" {% if request.GET.severity == severity.id|stringformat:"s" %}selected{% endif %}>{{ severity.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </th>
+                        <th>
+                            <select name="category">
+                                <option value="">Todas</option>
+                                {% for category in categories %}
+                                <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:"s" %}selected{% endif %}>{{ category.description }}</option>
+                                {% endfor %}
+                            </select>
+                        </th>
+                        <th>
+                            <select name="status">
+                                <option value="">Todos</option>
+                                {% for status in statuses %}
+                                <option value="{{ status.id }}" {% if request.GET.status == status.id|stringformat:"s" %}selected{% endif %}>{{ status.description }}</option>
+                                {% endfor %}
+                            </select>
+                        </th>
+                    </form>
+                </tr>
+            </thead>
+            <tbody>
+                {% for nonconformity in nonconformities %}
+                <tr class="nonconformity-row" data-id="{{ nonconformity.id }}">
+                    <td>{{ nonconformity.code }}</td>
+                    <td>{{ nonconformity.creation_date|date:"d/m/Y" }}</td>
+                    <td>{{ nonconformity.description|truncatechars:50 }}</td>
+                    <td>{{ nonconformity.severity.name }}</td>
+                    <td>{{ nonconformity.category.description }}</td>
+                    <td>{{ nonconformity.status.description }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">No hay no conformidades que coincidan con los criterios.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Panel lateral para detalles (solo en pantallas anchas) -->
+<div id="detail-panel" class="detail-panel">
+    <!-- El contenido se cargará dinámicamente -->
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Script para manejar el envío del formulario de filtrado
+document.getElementById('filter-form').addEventListener('change', function() {
+    this.submit();
+});
+
+// Script para manejar el clic en las filas y mostrar el detalle
+document.querySelectorAll('.nonconformity-row').forEach(function(row) {
+    row.addEventListener('click', function() {
+        var nonconformityId = this.dataset.id;
+        // Verificar el ancho de la pantalla
+        if (window.innerWidth >= 768) {
+            // Pantalla ancha: cargar detalle en el panel lateral
+            fetch('{% url "nonconformities:nonconformity_detail_ajax" %}?id=' + nonconformityId)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('detail-panel').innerHTML = data;
+                document.getElementById('detail-panel').classList.add('open');
+            });
+        } else {
+            // Pantalla estrecha: redirigir a la página de detalle
+            window.location.href = '{% url "nonconformities:nonconformity_detail" 0 %}'.replace('0', nonconformityId);
+        }
+    });
+});
+
+// Cerrar el panel lateral al hacer clic fuera de él
+document.addEventListener('click', function(event) {
+    var panel = document.getElementById('detail-panel');
+    if (panel.classList.contains('open') && !panel.contains(event.target) && !event.target.closest('.nonconformity-row')) {
+        panel.classList.remove('open');
+    }
+});
+</script>
+{% endblock %}
