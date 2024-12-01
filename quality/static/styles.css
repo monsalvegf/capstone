@@ -1,8 +1,280 @@
+/* Estilos generales */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5; /* Mantiene el fondo claro para todo el sitio */
 }
 
+/* Encabezado */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #4F81BD;
+    color: white;
+    padding: 10px 20px;
+}
+
+.header .logo {
+    margin: 0;
+    font-size: 24px;
+}
+
+.header .user-name {
+    font-size: 16px;
+}
+
+/* Alineación del texto de bienvenida y los botones */
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.header-right .user-name {
+    margin-right: 10px;
+}
+
+/* Contenedor principal */
+.container {
+    padding: 0;
+    margin: 0;
+}
+
+/* Barra superior */
+.top-bar {
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px 20px;
+    background-color: #f2f2f2;
+}
+
+.top-bar .btn {
+    display: inline-block;
+    background-color: #4F81BD;
+    color: white;
+    padding: 8px 12px;
+    text-decoration: none;
+    margin-right: 10px;
+    border-radius: 4px;
+}
+
+.top-bar .btn:hover {
+    background-color: #3B6AA0;
+}
+
+/* Contenedor de dos columnas */
+.two-column-layout {
+    display: flex;
+    height: calc(100vh - 60px);
+    overflow: hidden;
+}
+
+/* Columna izquierda: Lista y filtrado */
+.left-column {
+    width: 50%;
+    overflow-y: auto;
+    font-size: 0.8em;
+    padding: 10px 20px;
+    box-sizing: border-box;
+}
+
+/* Columna derecha: Panel de detalles */
+.right-column {
+    width: 50%;
+    overflow-y: auto;
+    border-left: 1px solid #ccc;
+    padding: 10px 20px;
+    box-sizing: border-box;
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 767px) {
+    .two-column-layout {
+        flex-direction: column;
+        height: auto;
+    }
+    .left-column,
+    .right-column {
+        width: 100%;
+        height: auto;
+    }
+    .right-column {
+        display: none;
+    }
+}
+
+/* Tabla */
+.table-responsive {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+.nonconformity-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75em;
+}
+
+.nonconformity-table th,
+.nonconformity-table td {
+    border: 1px solid #ddd;
+    padding: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nonconformity-table th {
+    background-color: #f2f2f2;
+    text-align: left;
+}
+
+/* Ajustar el ancho de las columnas */
+.nonconformity-table th:nth-child(1),
+.nonconformity-table td:nth-child(1) {
+    width: 8%; /* Código */
+}
+
+.nonconformity-table th:nth-child(2),
+.nonconformity-table td:nth-child(2) {
+    width: 12%; /* Fecha Apertura */
+}
+
+.nonconformity-table th:nth-child(3),
+.nonconformity-table td:nth-child(3) {
+    width: 40%; /* Descripción */
+}
+
+.nonconformity-table th:nth-child(4),
+.nonconformity-table td:nth-child(4) {
+    width: 10%; /* Severidad */
+}
+
+.nonconformity-table th:nth-child(5),
+.nonconformity-table td:nth-child(5) {
+    width: 15%; /* Clasificación */
+}
+
+.nonconformity-table th:nth-child(6),
+.nonconformity-table td:nth-child(6) {
+    width: 15%; /* Estado */
+}
+
+.nonconformity-row {
+    cursor: pointer;
+}
+
+.nonconformity-row:hover {
+    background-color: #f9f9f9;
+}
+
+/* Inputs y selects en la tabla */
+.nonconformity-table input[type="text"],
+.nonconformity-table input[type="date"],
+.nonconformity-table select {
+    width: 100%;
+    padding: 4px;
+    box-sizing: border-box;
+    font-size: 0.75em;
+}
+
+/* Panel lateral */
+.detail-panel {
+    padding: 20px;
+}
+
+.detail-content {
+    font-size: 0.85em;
+    line-height: 1.5;
+}
+
+.detail-content h3 {
+    margin-top: 0;
+}
+
+.detail-content #default-detail-content {
+    text-align: center;
+    color: #888;
+}
+
+/* Botón para cerrar o restablecer el panel de detalles */
+.btn-close-detail {
+    background-color: #e74c3c;
+    color: white;
+    padding: 6px 10px;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    float: right;
+}
+
+.btn-close-detail:hover {
+    background-color: #c0392b;
+}
+
+/* Estilos para el modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    border-radius: 5px;
+}
+
+.close-button {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Estilos para los botones de login y logout */
+.btn-login, .btn-logout {
+    background-color: #007BFF;
+    color: white;
+    padding: 8px 12px;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-login:hover, .btn-logout:hover {
+    background-color: #0056b3;
+}
+
+/* Estilos específicos para la página de login */
 .login-container {
     max-width: 400px;
     margin: 5rem auto;
@@ -12,23 +284,23 @@ body {
     border-radius: 5px;
 }
 
-h1 {
+.login-container h1 {
     text-align: center;
     margin-bottom: 2rem;
 }
 
-form label {
+.login-container form label {
     display: block;
     margin-top: 1rem;
 }
 
-form input {
+.login-container form input {
     width: 100%;
     padding: 0.5rem;
     margin-top: 0.5rem;
 }
 
-button[type="submit"] {
+.login-container button[type="submit"] {
     width: 100%;
     padding: 0.75rem;
     margin-top: 2rem;
@@ -39,7 +311,7 @@ button[type="submit"] {
     cursor: pointer;
 }
 
-button[type="submit"]:hover {
+.login-container button[type="submit"]:hover {
     background-color: #0056b3;
 }
 

@@ -2,11 +2,13 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Quality System{% endblock %}</title>
     {% load static %}
     <!-- Incluir tu archivo CSS personalizado -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-</head>
+    {% block extra_head %}{% endblock %}
+</head>  
 <body>
     <!-- Encabezado -->
     <header class="header">
