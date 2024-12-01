@@ -26,14 +26,16 @@ body {
 
 /* Contenedor principal */
 .container {
-    padding: 20px;
+    padding: 0; /* Ajustamos el padding para que las columnas ocupen todo el espacio */
+    margin: 0;
 }
 
 /* Barra superior */
 .top-bar {
     display: flex;
     justify-content: flex-start;
-    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #f2f2f2;
 }
 
 .top-bar .btn {
@@ -50,15 +52,64 @@ body {
     background-color: #3B6AA0;
 }
 
+/* Contenedor de dos columnas */
+.two-column-layout {
+    display: flex;
+    height: calc(100vh - 60px); /* Ajustamos la altura restando el header */
+    overflow: hidden;
+}
+
+/* Columna izquierda: Lista y filtrado */
+.left-column {
+    width: 50%;
+    overflow-y: auto;
+    font-size: 0.85em; /* Tamaño de letra más pequeño */
+    padding: 10px 20px;
+    box-sizing: border-box;
+}
+
+/* Columna derecha: Panel de detalles */
+.right-column {
+    width: 50%;
+    overflow-y: auto;
+    border-left: 1px solid #ccc;
+    padding: 10px 20px;
+    box-sizing: border-box;
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 767px) {
+    .two-column-layout {
+        flex-direction: column;
+        height: auto;
+    }
+    .left-column,
+    .right-column {
+        width: 100%;
+        height: auto;
+    }
+    .right-column {
+        display: none; /* Ocultamos el panel derecho en pantallas pequeñas */
+    }
+}
+
 /* Tabla */
+.table-responsive {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
 .nonconformity-table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed; /* Para ajustar el ancho de las columnas */
 }
 
-.nonconformity-table th, .nonconformity-table td {
+.nonconformity-table th,
+.nonconformity-table td {
     border: 1px solid #ddd;
     padding: 8px;
+    word-wrap: break-word;
 }
 
 .nonconformity-table th {
@@ -81,24 +132,66 @@ body {
     width: 100%;
     padding: 4px;
     box-sizing: border-box;
+    font-size: 0.9em;
 }
 
 /* Panel lateral */
 .detail-panel {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 30%;
-    height: 100%;
-    background-color: #fff;
-    border-left: 1px solid #ddd;
-    overflow-y: auto;
-    transition: right 0.3s ease;
-    z-index: 1000;
+    padding: 20px;
 }
 
-.detail-panel.open {
-    right: 0;
+/* Estilos para el modal */
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto; /* Centrar verticalmente */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    border-radius: 5px;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Estilos para el contenido del detalle */
+.detail-content {
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+.detail-content h3 {
+    margin-top: 0;
 }
 
 /* Estilos para dispositivos móviles */
