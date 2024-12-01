@@ -63,7 +63,7 @@ body {
 .left-column {
     width: 50%;
     overflow-y: auto;
-    font-size: 0.85em; /* Tamaño de letra más pequeño */
+    font-size: 0.9em; /* Tamaño de letra ajustado */
     padding: 10px 20px;
     box-sizing: border-box;
 }
@@ -103,18 +103,53 @@ body {
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed; /* Para ajustar el ancho de las columnas */
+    font-size: 0.85em; /* Tamaño de letra más pequeño en la tabla */
 }
 
 .nonconformity-table th,
 .nonconformity-table td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 4px; /* Reducimos el padding */
     word-wrap: break-word;
+    white-space: nowrap; /* Evitar que el texto se desborde */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Añadir puntos suspensivos al texto que se desborda */
 }
 
 .nonconformity-table th {
     background-color: #f2f2f2;
     text-align: left;
+}
+
+/* Ajustar el ancho de las columnas */
+.nonconformity-table th:nth-child(1),
+.nonconformity-table td:nth-child(1) {
+    width: 10%; /* Código */
+}
+
+.nonconformity-table th:nth-child(2),
+.nonconformity-table td:nth-child(2) {
+    width: 15%; /* Fecha Apertura */
+}
+
+.nonconformity-table th:nth-child(3),
+.nonconformity-table td:nth-child(3) {
+    width: 35%; /* Descripción */
+}
+
+.nonconformity-table th:nth-child(4),
+.nonconformity-table td:nth-child(4) {
+    width: 10%; /* Severidad */
+}
+
+.nonconformity-table th:nth-child(5),
+.nonconformity-table td:nth-child(5) {
+    width: 15%; /* Clasificación */
+}
+
+.nonconformity-table th:nth-child(6),
+.nonconformity-table td:nth-child(6) {
+    width: 15%; /* Estado */
 }
 
 .nonconformity-row {
@@ -138,6 +173,43 @@ body {
 /* Panel lateral */
 .detail-panel {
     padding: 20px;
+    /* Siempre visible en pantallas grandes */
+}
+
+.detail-panel.open {
+    /* La clase 'open' ya no es necesaria para mostrar el panel, pero la dejamos por compatibilidad */
+}
+
+/* Estilos para el contenido del detalle */
+.detail-content {
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+.detail-content h3 {
+    margin-top: 0;
+}
+
+.detail-content #default-detail-content {
+    text-align: center;
+    color: #888;
+}
+
+/* Botón para cerrar o restablecer el panel de detalles */
+.btn-close-detail {
+    background-color: #e74c3c;
+    color: white;
+    padding: 6px 10px;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    float: right;
+}
+
+.btn-close-detail:hover {
+    background-color: #c0392b;
 }
 
 /* Estilos para el modal */
@@ -166,7 +238,6 @@ body {
 
 .close-button {
     color: #aaa;
-    float: right;
     font-size: 28px;
     font-weight: bold;
     background: none;
@@ -182,16 +253,6 @@ body {
     color: black;
     text-decoration: none;
     cursor: pointer;
-}
-
-/* Estilos para el contenido del detalle */
-.detail-content {
-    font-size: 1em;
-    line-height: 1.5;
-}
-
-.detail-content h3 {
-    margin-top: 0;
 }
 
 /* Estilos para dispositivos móviles */
