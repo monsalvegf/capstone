@@ -23,7 +23,7 @@
                         <!-- Encabezados de tabla -->
                         <tr>
                             <th>Código</th>
-                            <th>Fecha Apertura</th>
+                            <th>F. Apertura</th>
                             <th>Descripción de la Incidencia</th>
                             <th>Severidad</th>
                             <th>Clasificación</th>
@@ -67,7 +67,7 @@
                         <tr class="nonconformity-row" data-id="{{ nonconformity.id }}">
                             <td>{{ nonconformity.code }}</td>
                             <td>{{ nonconformity.creation_date|date:"d/m/Y" }}</td>
-                            <td>{{ nonconformity.description|truncatechars:50 }}</td>
+                            <td>{{ nonconformity.description }}</td>
                             <td>{{ nonconformity.severity.name }}</td>
                             <td>{{ nonconformity.category.description }}</td>
                             <td>{{ nonconformity.status.description }}</td>

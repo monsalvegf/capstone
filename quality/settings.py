@@ -132,6 +132,8 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+
 # Directorio donde se recopilarán los archivos estáticos (para producción)
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 

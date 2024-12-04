@@ -6,13 +6,61 @@ body {
 }
 
 /* Encabezado */
-/* ... (mantener como está) */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #4F81BD;
+    color: white;
+    padding: 10px 20px;
+}
+
+.header .logo {
+    margin: 0;
+    font-size: 24px;
+}
+
+.header .user-name {
+    font-size: 16px;
+}
+
+/* Alineación del texto de bienvenida y los botones */
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.header-right .user-name {
+    margin-right: 10px;
+}
 
 /* Contenedor principal */
-/* ... (mantener como está) */
+.container {
+    padding: 0;
+    margin: 0;
+}
 
 /* Barra superior */
-/* ... (mantener como está) */
+.top-bar {
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px 20px;
+    background-color: #f2f2f2;
+}
+
+.top-bar .btn {
+    display: inline-block;
+    background-color: #4F81BD;
+    color: white;
+    padding: 8px 12px;
+    text-decoration: none;
+    margin-right: 10px;
+    border-radius: 4px;
+}
+
+.top-bar .btn:hover {
+    background-color: #3B6AA0;
+}
 
 /* Contenedor de dos columnas */
 .two-column-layout {
@@ -24,18 +72,46 @@ body {
 /* Columna izquierda: Lista y filtrado */
 .left-column {
     width: 50%;
-    overflow-x: auto; /* Permitir desplazamiento horizontal si es necesario */
+    overflow-x: auto; /* Permitir desplazamiento horizontal */
     padding: 10px 20px;
     box-sizing: border-box;
-    font-size: clamp(0.75em, 1vw, 0.9em); /* Tamaño de fuente adaptable */
+    font-size: 1em; /* Tamaño de fuente base */
 }
 
 /* Columna derecha: Panel de detalles */
-/* ... (mantener como está) */
+.right-column {
+    width: 50%;
+    overflow-y: auto;
+    border-left: 1px solid #ccc;
+    padding: 10px 20px;
+    box-sizing: border-box;
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 767px) {
+    .two-column-layout {
+        flex-direction: column;
+        height: auto;
+    }
+    .left-column,
+    .right-column {
+        width: 100%;
+        height: auto;
+    }
+    .right-column {
+        display: none; /* Ocultamos el panel derecho en pantallas pequeñas */
+    }
+}
 
 /* Tabla */
+.table-responsive {
+    overflow-x: auto; /* Permitir desplazamiento horizontal */
+    max-width: 100%;
+}
+
 .nonconformity-table {
     width: 100%;
+    min-width: 800px; /* Ajusta este valor según sea necesario */
     border-collapse: collapse;
     table-layout: auto; /* Permitir ajuste automático de columnas */
 }
@@ -44,31 +120,191 @@ body {
 .nonconformity-table td {
     border: 1px solid #ddd;
     padding: 4px;
-    white-space: nowrap; /* Evitar que el texto se envuelva */
+    white-space: normal; /* Permitir que el texto se envuelva */
+    word-wrap: break-word;
     overflow: hidden;
-    text-overflow: ellipsis; /* Añadir puntos suspensivos */
+    text-overflow: ellipsis;
 }
 
-/* Ajustar el ancho mínimo de las columnas clave */
-.nonconformity-table th:nth-child(1),
-.nonconformity-table td:nth-child(1) {
-    min-width: 50px;
+.nonconformity-table th {
+    background-color: #f2f2f2;
+    text-align: left;
 }
 
-/* Repite para otras columnas si es necesario */
+.nonconformity-row {
+    cursor: pointer;
+}
 
-/* Estilos adicionales */
-/* ... (mantener el resto de los estilos) */
+.nonconformity-row:hover {
+    background-color: #f9f9f9;
+}
+
+/* Inputs y selects en la tabla */
+.nonconformity-table input[type="text"],
+.nonconformity-table input[type="date"],
+.nonconformity-table select {
+    width: 100%;
+    padding: 4px;
+    box-sizing: border-box;
+    font-size: 0.9em;
+}
+
+/* Panel lateral */
+.detail-panel {
+    padding: 20px;
+}
+
+.detail-content {
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+
+.detail-content h3 {
+    margin-top: 0;
+}
+
+.detail-content #default-detail-content {
+    text-align: center;
+    color: #888;
+}
+
+/* Botón para cerrar o restablecer el panel de detalles */
+.btn-close-detail {
+    background-color: #e74c3c;
+    color: white;
+    padding: 6px 10px;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    float: right;
+}
+
+.btn-close-detail:hover {
+    background-color: #c0392b;
+}
+
+/* Estilos para el modal */
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto; /* Centrar verticalmente */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 800px;
+    position: relative;
+    border-radius: 5px;
+}
+
+.close-button {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Estilos para los botones de login y logout */
+.btn-login, .btn-logout {
+    background-color: #007BFF;
+    color: white;
+    padding: 8px 12px;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-login:hover, .btn-logout:hover {
+    background-color: #0056b3;
+}
 
 /* Media Queries para ajustes específicos */
 @media (max-width: 1200px) {
     .left-column {
-        font-size: clamp(0.7em, 1vw, 0.85em);
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 992px) {
+    .left-column {
+        font-size: 0.85em;
     }
 }
 
 @media (max-width: 768px) {
     .left-column {
-        font-size: clamp(0.65em, 1.2vw, 0.8em);
+        font-size: 0.8em;
     }
+}
+
+/* ... Código existente ... */
+
+/* Ajustar el ancho de la columna "Código" */
+.nonconformity-table th:nth-child(1),
+.nonconformity-table td:nth-child(1) {
+    width: 50px; /* Ajusta según sea necesario */
+    max-width: 60px;
+    text-align: center;
+    padding: 2px 4px;
+    font-size: 0.9em;
+}
+
+/* Ajustar el ancho de la columna "F. apertura" */
+.nonconformity-table th:nth-child(2),
+.nonconformity-table td:nth-child(2) {
+    width: 80px; /* Ajusta según sea necesario */
+    max-width: 90px;
+    text-align: center;
+    padding: 2px 4px;
+    font-size: 0.9em;
+}
+
+/* Reducir padding y ajustar tamaño de fuente en las columnas de filtrado */
+.nonconformity-table input[type="text"],
+.nonconformity-table input[type="date"],
+.nonconformity-table select {
+    padding: 2px 4px;
+    font-size: 0.9em;
+}
+
+/* Estilo para resaltar la fila al pasar el ratón por encima */
+.nonconformity-row:hover {
+    background-color: #e6f7ff; /* Color de fondo al hacer hover */
+}
+
+/* Estilo para la fila seleccionada */
+.nonconformity-row.selected {
+    background-color: #cceeff; /* Color de fondo para la fila seleccionada */
+}
+
+/* Asegurar que el texto es legible sobre el fondo */
+.nonconformity-row:hover td,
+.nonconformity-row.selected td {
+    color: #000; /* Color del texto */
 }
