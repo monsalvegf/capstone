@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Nonconformity, Severity, Category, Status
+from .models import Nonconformity, NonconformityLine, Severity, Category, Status
 from django.http import HttpResponse
 import csv
 
@@ -81,3 +81,13 @@ def nonconformity_detail(request, pk):
     nonconformity = get_object_or_404(Nonconformity, pk=pk)
     return render(request, 'nonconformities/nonconformity_detail.html', {'nonconformity': nonconformity})
 
+@login_required
+def nonconformity_detail_partial(request, pk):
+    nonconformity = get_object_or_404(Nonconformity, pk=pk)
+    # Obtener las líneas de acción relacionadas, ordenadas por fecha de registro
+    action_lines = NonconformityLine.objects.filter(nonconformity=nonconformity).order_by('date')
+    context = {
+        'nonconformity': nonconformity,
+        'action_lines': action_lines,
+    }
+    return render(request, 'nonconformities/nonconformity_detail_partial.html', context)

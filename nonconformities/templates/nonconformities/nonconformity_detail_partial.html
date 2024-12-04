@@ -1,10 +1,21 @@
 <div class="detail-content">
-    <h3>No Conformidad: {{ nonconformity.code }}</h3>
-    <p><strong>Descripción:</strong> {{ nonconformity.description }}</p>
+    <!-- Mostrar la fecha de creación y la descripción -->
+    <h3>No Conformidad {{ nonconformity.code }}</h3>
     <p><strong>Fecha de Creación:</strong> {{ nonconformity.creation_date|date:"d/m/Y" }}</p>
-    <p><strong>Estado:</strong> {{ nonconformity.status.description }}</p>
-    <p><strong>Área:</strong> {{ nonconformity.area.description }}</p>
-    <p><strong>Severidad:</strong> {{ nonconformity.severity.name }}</p>
-    <p><strong>Categoría:</strong> {{ nonconformity.category.description }}</p>
-    <!-- Agrega más detalles según sea necesario -->
+    <p><strong>Descripción:</strong> {{ nonconformity.description }}</p>
+
+    <!-- Mostrar las líneas de acción -->
+    {% if action_lines %}
+        <h4>Acciones:</h4>
+        <ul>
+            {% for line in action_lines %}
+                <li>
+                    <p><strong>Fecha:</strong> {{ line.registration_date|date:"d/m/Y" }}</p>
+                    <p>{{ line.action_description }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay acciones registradas para esta no conformidad.</p>
+    {% endif %}
 </div>
