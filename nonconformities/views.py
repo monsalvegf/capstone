@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Nonconformity, Severity, Category, Status
 from django.http import HttpResponse
+from django.views.generic import ListView
 import csv
 
 @login_required
@@ -105,3 +106,40 @@ def export_nonconformities(request):
         ])
 
     return response
+
+class NonConformityListView(ListView):
+    model = Nonconformity
+    template_name = 'nonconformity_list.html'
+    context_object_name = 'nonconformities'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        code = self.request.GET.get('code')
+        creation_date = self.request.GET.get('creation_date')
+        description = self.request.GET.get('description')
+        severity = self.request.GET.get('severity')
+        category = self.request.GET.get('category')
+        status = self.request.GET.get('status')
+
+        if code:
+            queryset = queryset.filter(code__icontains=code)
+        if creation_date:
+            queryset = queryset.filter(creation_date=creation_date)
+        if description:
+            queryset = queryset.filter(description__icontains=description)
+        if severity:
+            queryset = queryset.filter(severity__id=severity)
+        if category:
+            queryset = queryset.filter(category__id=category)
+        if status:
+            queryset = queryset.filter(status__id=status)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Agregar listas para los selectores de filtrado
+        context['severities'] = Severity.objects.all()
+        context['categories'] = Category.objects.all()
+        context['statuses'] = Status.objects.all()
+        return context

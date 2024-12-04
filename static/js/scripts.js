@@ -79,3 +79,32 @@ document.addEventListener('keydown', function(event) {
         }
     }
 });
+
+
+// Esperar a que el DOM esté cargado
+document.addEventListener('DOMContentLoaded', function() {
+    // Agregar event listener a las filas de la tabla
+    document.querySelectorAll('.nonconformity-row').forEach(function(row) {
+        row.addEventListener('click', function() {
+            var nonconformityId = this.getAttribute('data-id');
+            loadNonconformityDetail(nonconformityId);
+            updateSelectedRow(this);
+        });
+    });
+
+    // Agregar event listener al formulario de filtrado
+    var filterForm = document.getElementById('filter-form');
+    if (filterForm) {
+        // Agregar event listener a los inputs y selects dentro del formulario
+        filterForm.querySelectorAll('input, select').forEach(function(input) {
+            input.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault(); // Prevenir el comportamiento por defecto
+                    filterForm.submit();
+                }
+            });
+        });
+    }
+});
+
+// ... Resto del código existente ...

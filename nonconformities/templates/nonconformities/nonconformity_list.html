@@ -16,22 +16,23 @@
                 </div>
             </div>
 
-            <!-- Tabla de no conformidades -->
-            <div class="table-responsive">
-                <table class="nonconformity-table">
-                    <thead>
-                        <!-- Encabezados de tabla -->
-                        <tr>
-                            <th>Código</th>
-                            <th>F. Apertura</th>
-                            <th>Descripción de la Incidencia</th>
-                            <th>Severidad</th>
-                            <th>Clasificación</th>
-                            <th>Estado</th>
-                        </tr>
-                        <!-- Fila para búsqueda y filtrado -->
-                        <tr>
-                            <form method="get" id="filter-form">
+            <!-- Formulario de filtrado -->
+            <form method="get" id="filter-form">
+                <!-- Tabla de no conformidades -->
+                <div class="table-responsive">
+                    <table class="nonconformity-table">
+                        <thead>
+                            <!-- Encabezados de tabla -->
+                            <tr>
+                                <th>Código</th>
+                                <th>F. Apertura</th>
+                                <th>Descripción de la Incidencia</th>
+                                <th>Severidad</th>
+                                <th>Clasificación</th>
+                                <th>Estado</th>
+                            </tr>
+                            <!-- Fila para búsqueda y filtrado -->
+                            <tr>
                                 <th><input type="text" name="code" value="{{ request.GET.code }}"></th>
                                 <th><input type="date" name="creation_date" value="{{ request.GET.creation_date }}"></th>
                                 <th><input type="text" name="description" value="{{ request.GET.description }}"></th>
@@ -59,27 +60,27 @@
                                         {% endfor %}
                                     </select>
                                 </th>
-                            </form>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for nonconformity in nonconformities %}
-                        <tr class="nonconformity-row" data-id="{{ nonconformity.id }}">
-                            <td>{{ nonconformity.code }}</td>
-                            <td>{{ nonconformity.creation_date|date:"d/m/Y" }}</td>
-                            <td>{{ nonconformity.description }}</td>
-                            <td>{{ nonconformity.severity.name }}</td>
-                            <td>{{ nonconformity.category.description }}</td>
-                            <td>{{ nonconformity.status.description }}</td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="6">No hay no conformidades que coincidan con los criterios.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for nonconformity in nonconformities %}
+                            <tr class="nonconformity-row" data-id="{{ nonconformity.id }}">
+                                <td>{{ nonconformity.code }}</td>
+                                <td>{{ nonconformity.creation_date|date:"d/m/Y" }}</td>
+                                <td>{{ nonconformity.description }}</td>
+                                <td>{{ nonconformity.severity.name }}</td>
+                                <td>{{ nonconformity.category.description }}</td>
+                                <td>{{ nonconformity.status.description }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6">No hay no conformidades que coincidan con los criterios.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </form>
         </div>
         <!-- Columna derecha: Panel de detalles -->
         <div class="right-column">
