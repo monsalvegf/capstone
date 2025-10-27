@@ -78,15 +78,152 @@ TEMPLATES = [
 WSGI_APPLICATION = 'quality.wsgi.application'
 
 
-# Database
+# ==================================================================================
+# DATABASE CONFIGURATION - SQLite Optimizado para Producción
+# ==================================================================================
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+#
+# DISEÑO:
+#   - Optimizado para 10 usuarios consultando y 4 escribiendo simultáneamente
+#   - WAL mode habilitado para máxima concurrencia
+#   - Timeout de 20 segundos para evitar "database is locked"
+#   - Cache de 64MB para mejorar performance de lectura
+#
+# VERIFICACIÓN DESPUÉS DE DEPLOYMENT:
+#   1. Ejecutar en shell de Django:
+#      python manage.py shell
+#      >>> from quality.settings import enable_sqlite_wal_mode
+#      >>> enable_sqlite_wal_mode()
+#
+#   2. Verificar que aparezcan 3 archivos en el directorio:
+#      - db.sqlite3       (base de datos principal)
+#      - db.sqlite3-wal   (Write-Ahead Log, cambios pendientes)
+#      - db.sqlite3-shm   (Shared Memory, índice del WAL)
+#
+# IMPORTANTE:
+#   - Los archivos -wal y -shm son NORMALES y NECESARIOS con WAL mode
+#   - NO borrar estos archivos mientras la aplicación esté corriendo
+#   - En backups, incluir los 3 archivos para garantizar consistencia
+#
+# CUÁNDO MIGRAR A PostgreSQL:
+#   - Más de 20 usuarios concurrentes
+#   - Escrituras intensivas (>100 transacciones/segundo)
+#   - Necesidad de replicación o alta disponibilidad
+#   - Base de datos > 100GB
+# ==================================================================================
 
+# Configuración optimizada de SQLite para producción
+# Diseñada para hasta 10 usuarios consultando y 4 escribiendo simultáneamente
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+
+        # TIMEOUT: 20 segundos de espera antes de lanzar error de bloqueo
+        # Beneficio: Evita errores "database is locked" en escrituras concurrentes
+        # Por defecto SQLite usa 5 segundos, aumentamos a 20 para mayor tolerancia
+        'timeout': 20,
+
+        # OPTIONS: Configuraciones adicionales de SQLite
+        'OPTIONS': {
+            # INIT COMMAND: Comandos SQL ejecutados al conectar con la BD
+            # Estas optimizaciones se ejecutan cada vez que Django abre una conexión
+            #
+            # EXPLICACIÓN DE CADA PRAGMA:
+            #
+            # 1. journal_mode=WAL - Write-Ahead Logging
+            #    Permite lecturas y escrituras simultáneas sin bloqueos
+            #    Crea archivos -wal y -shm (normales y necesarios)
+            #
+            # 2. busy_timeout=20000 - Timeout de 20 segundos
+            #    Refuerza el timeout para evitar "database is locked"
+            #
+            # 3. synchronous=NORMAL - Balance velocidad/seguridad
+            #    Con WAL mode, NORMAL es seguro y ~50% más rápido que FULL
+            #
+            # 4. cache_size=-64000 - Cache de 64MB en RAM
+            #    Reduce lecturas de disco, acelera consultas (default: 2MB)
+            #
+            # 5. temp_store=MEMORY - Tablas temporales en RAM
+            #    Acelera operaciones con índices temporales y ORDER BY
+            #
+            'init_command': (
+                "PRAGMA journal_mode=WAL; "
+                "PRAGMA busy_timeout=20000; "
+                "PRAGMA synchronous=NORMAL; "
+                "PRAGMA cache_size=-64000; "
+                "PRAGMA temp_store=MEMORY;"
+            ),
+        },
     }
 }
+
+
+# Función helper para verificar/habilitar WAL mode en SQLite
+# Útil para ejecutar manualmente o en scripts de deployment
+def enable_sqlite_wal_mode():
+    """
+    Habilita Write-Ahead Logging en SQLite y verifica la configuración.
+
+    Esta función se puede ejecutar desde manage.py shell para:
+    1. Verificar que WAL mode está habilitado
+    2. Forzar la activación de WAL si no está activo
+    3. Mostrar información de configuración actual
+
+    Uso:
+        from quality.settings import enable_sqlite_wal_mode
+        enable_sqlite_wal_mode()
+
+    Retorna:
+        dict con información de la configuración actual
+    """
+    import sqlite3
+    from pathlib import Path
+
+    db_path = DATABASES['default']['NAME']
+
+    try:
+        conn = sqlite3.connect(str(db_path), timeout=20)
+        cursor = conn.cursor()
+
+        # Habilitar WAL mode
+        cursor.execute("PRAGMA journal_mode=WAL;")
+        journal_mode = cursor.fetchone()[0]
+
+        # Verificar otras configuraciones
+        cursor.execute("PRAGMA synchronous;")
+        synchronous = cursor.fetchone()[0]
+
+        cursor.execute("PRAGMA cache_size;")
+        cache_size = cursor.fetchone()[0]
+
+        cursor.execute("PRAGMA temp_store;")
+        temp_store = cursor.fetchone()[0]
+
+        conn.close()
+
+        config_info = {
+            'journal_mode': journal_mode,
+            'synchronous': synchronous,
+            'cache_size_pages': cache_size,
+            'temp_store': temp_store,
+            'database_path': str(db_path),
+        }
+
+        print("✓ Configuración de SQLite actualizada:")
+        for key, value in config_info.items():
+            print(f"  {key}: {value}")
+
+        if journal_mode.upper() == 'WAL':
+            print("\n✓ WAL mode está HABILITADO correctamente")
+        else:
+            print(f"\n⚠ WAL mode NO está habilitado (modo actual: {journal_mode})")
+
+        return config_info
+
+    except Exception as e:
+        print(f"✗ Error al configurar SQLite: {e}")
+        return None
 
 
 # Password validation
