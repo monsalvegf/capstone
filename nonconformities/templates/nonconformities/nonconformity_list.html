@@ -11,6 +11,10 @@
             <!-- Barra superior con botones -->
             <div class="top-bar">
                 <div class="top-bar-left">
+                    <!-- Botón "Nueva NC" -->
+                    <a href="{% url 'nonconformities:create_nonconformity' %}" class="btn btn-primary" style="margin-right: 10px;">
+                        + Nueva NC
+                    </a>
                     <!-- Botón "Exportar" -->
                     <a href="{% url 'nonconformities:export' %}?{{ request.GET.urlencode }}" class="btn">Exportar</a>
                 </div>
