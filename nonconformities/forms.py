@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import Nonconformity, NonconformityLine, Status, Category
-from core.models import Area, Severity
+from .models import Nonconformity, NonconformityLine, Status, Category, Severity
+from core.models import Area
 
 
 class NonconformityForm(forms.ModelForm):

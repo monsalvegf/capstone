@@ -90,15 +90,17 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
         'timeout': 20,
-        'OPTIONS': {
-            'init_command': (
-                "PRAGMA journal_mode=WAL; "
-                "PRAGMA busy_timeout=20000; "
-                "PRAGMA synchronous=NORMAL; "
-                "PRAGMA cache_size=-64000; "
-                "PRAGMA temp_store=MEMORY;"
-            ),
-        },
+        # NOTA: init_command no es válido para SQLite en Django
+        # Los PRAGMAs de SQLite deben configurarse usando señales o middleware
+        # 'OPTIONS': {
+        #     'init_command': (
+        #         "PRAGMA journal_mode=WAL; "
+        #         "PRAGMA busy_timeout=20000; "
+        #         "PRAGMA synchronous=NORMAL; "
+        #         "PRAGMA cache_size=-64000; "
+        #         "PRAGMA temp_store=MEMORY;"
+        #     ),
+        # },
     }
 }
 

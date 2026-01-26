@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Importa los modelos con los nuevos nombres en inglés
-from .models import Status, Category, Nonconformity, NonconformityLine
+from .models import Severity, Status, Category, Nonconformity, NonconformityLine
 
 # Registro de modelos específicos de 'nonconformities'
 
@@ -15,6 +15,7 @@ class NonconformityAdmin(admin.ModelAdmin):
     inlines = [NonconformityLineInline]
 
 
+admin.site.register(Severity)
 admin.site.register(Status)
 admin.site.register(Nonconformity, NonconformityAdmin)
 admin.site.register(Category)
