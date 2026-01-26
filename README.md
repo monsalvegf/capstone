@@ -1,6 +1,6 @@
 # Quality Management System - Nonconformities Tracker
 
-A Django-based web application for managing quality nonconformities in industrial and organizational settings, specifically designed for ISO 9001 quality management system compliance.
+A Django-based web application for managing quality nonconformities in organizational settings.
 
 **Video Demo:** [URL to be added]
 
@@ -12,13 +12,13 @@ A Django-based web application for managing quality nonconformities in industria
 
 ### Why This Project is Distinct
 
-This Quality Management System represents a **fundamentally different domain** from all other projects in the CS50W course. It is neither a social network (Project 4) nor an e-commerce platform (Project 2). Instead, it addresses a specialized B2B use case: **industrial quality assurance and regulatory compliance tracking**.
+This Quality Management System represents a **fundamentally different domain** from all other projects in the CS50W course. It is neither a social network (Project 4) nor an e-commerce platform (Project 2). Instead, it addresses a specialized B2B use case: **quality assurance and regulatory compliance tracking**.
 
 **Key distinctions that set it apart:**
 
-1. **Specialized Business Domain**: This application serves quality managers, auditors, and compliance officers in manufacturing and service industries. It implements workflows specific to ISO 9001 quality management systems, including nonconformity lifecycle management (Open → Closed → Reopen), severity classification, and mandatory audit trails. Unlike social networks that focus on user interactions or e-commerce sites that handle transactions, this system manages regulatory compliance data with strict traceability requirements.
+1. **Specialized Business Domain**: This application serves quality managers, auditors, and compliance officers in manufacturing and service industries. It implements workflows specific to ISO 9001 quality management systems, including nonconformity lifecycle management (Open → Closed → Reopen), severity classification, and mandatory audit trails. Unlike social networks that focus on user interactions or e-commerce sites that handle transactions, this system manages regulatory compliance data.
 
-2. **Unique Data Model Architecture**: The application features a deliberately modular architecture with three separate Django apps (`core`, `nonconformities`, `accounts`), designed for future scalability. The `core` app contains only truly cross-functional models (like `Area`) that would be shared across multiple quality modules, while domain-specific models like `Severity` live in their respective apps. This architectural decision, which I recently refactored based on scalability analysis, demonstrates forward-thinking design that anticipates the addition of related modules (audits, corrective actions, document control, etc.).
+2. **Unique Data Model Architecture**: The application features a deliberately modular architecture with three separate Django apps (`core`, `nonconformities`, `accounts`), designed for future scalability. The `core` app contains only truly cross-functional models (like `Area`) that would be shared across multiple quality modules, while domain-specific models like `Severity` live in their respective apps.
 
 3. **Audit Trail and Compliance Features**: Every action on a nonconformity is automatically logged in `NonconformityLine` with user attribution and timestamps. This creates an immutable audit trail required for ISO 9001 compliance, where organizations must demonstrate who did what and when. The system automatically records status changes, edits, closures, and reopenings—a feature not present in any course project.
 
@@ -30,7 +30,7 @@ Beyond meeting the baseline requirements of using Django models and JavaScript, 
 
 **1. Advanced Database Design (6 Models with Complex Relationships)**
 
-The application includes six interconnected models (`Nonconformity`, `NonconformityLine`, `Severity`, `Status`, `Category`, `Area`) with carefully configured foreign key relationships. For example, `Nonconformity` has five different ForeignKey relationships, each with specific `on_delete` behaviors (`SET_NULL` for preserving referential integrity, `CASCADE` for dependent data). The `NonconformityLine` model implements a one-to-many relationship that creates a temporal audit log—a pattern not explored in course projects.
+The application includes six interconnected models (`Nonconformity`, `NonconformityLine`, `Severity`, `Status`, `Category`, `Area`) with carefully configured foreign key relationships. For example, `Nonconformity` has five different ForeignKey relationships, each with specific `on_delete` behaviors (`SET_NULL` for preserving referential integrity, `CASCADE` for dependent data). The `NonconformityLine` model implements a one-to-many relationship that creates a temporal audit log—a pattern.
 
 **2. Sophisticated JavaScript Implementation**
 
@@ -38,9 +38,9 @@ The frontend JavaScript (`static/js/scripts.js`) goes far beyond basic DOM manip
 
 - **AJAX with Fetch API**: Dynamic content loading without page refreshes, using the modern Fetch API with proper error handling and JSON parsing
 - **Responsive Detection with matchMedia**: The code detects screen size at runtime and dynamically switches between modal overlay (mobile) and side panel (desktop) presentation modes
-- **Progressive Enhancement**: All features work with traditional form POST as fallback if JavaScript fails, demonstrating understanding of web standards and accessibility
-- **Event Delegation**: Efficiently handles clicks on dynamically loaded table rows using data attributes
-- **Keyboard Navigation**: Implements Escape key to close modals and Enter key for form submission, showing attention to UX details
+- **Progressive Enhancement**: Features work with traditional form POST as fallback if JavaScript fails
+- **Event Delegation**: Handles clicks on dynamically loaded table rows using data attributes
+- **Keyboard Navigation**: Implements Escape key to close modals and Enter key for form submission
 
 **3. Complex Filtering System**
 
@@ -57,7 +57,7 @@ The application includes five different forms (`NonconformityForm`, `Nonconformi
 
 **5. Dual-Mode AJAX/Traditional POST Support**
 
-Several views (`change_status`, `add_action`) implement a sophisticated pattern that detects AJAX requests using `request.headers.get('X-Requested-With')` and returns either JSON (for AJAX) or HttpResponse redirects (for traditional POST). This requires careful handling of success/error states in both code paths and demonstrates understanding of HTTP headers and content negotiation.
+Several views (`change_status`, `add_action`) implement a pattern that detects AJAX requests using `request.headers.get('X-Requested-With')` and returns either JSON (for AJAX) or HttpResponse redirects (for traditional POST).
 
 **6. Responsive CSS Architecture**
 
@@ -76,9 +76,9 @@ The models use `auto_now_add=True` for creation timestamps and the views automat
 
 **8. CSV Export with Applied Filters**
 
-The export functionality doesn't just dump all data—it applies the exact same filters the user selected in the UI by reusing the `get_filtered_nonconformities()` function and passing `request.GET`. This maintains user context and demonstrates DRY (Don't Repeat Yourself) principles.
+The export functionality doesn't just dump all data—it applies the exact same filters the user selected in the UI by reusing the `get_filtered_nonconformities()` function and passing `request.GET`. This maintains user context.
 
-In summary, this project demonstrates complexity through: sophisticated database relationships, advanced JavaScript patterns, custom form validation, responsive design, dual-mode AJAX support, and domain-specific business logic—all integrated into a cohesive, production-oriented application that solves real-world regulatory compliance needs.
+In summary, this project demonstrates complexity through: database relationships, JavaScript patterns, custom form validation, responsive design, dual-mode AJAX support, and domain-specific business logic—all integrated into an application that solves real-world regulatory compliance needs.
 
 ---
 
@@ -100,7 +100,7 @@ In summary, this project demonstrates complexity through: sophisticated database
 
 - **`core/admin.py`**: Registers `Area` model with Django admin interface for easy data management.
 
-- **`core/migrations/`**: Database migration files tracking schema changes for the core app, including `0002_delete_severity.py` from the recent architectural refactoring that moved Severity to nonconformities app.
+- **`core/migrations/`**: Database migration files tracking schema changes for the core app.
 
 ### **Nonconformities App (Main Application)**
 
@@ -332,5 +332,5 @@ This project was created as the capstone project for CS50's Web Programming with
 ---
 
 **Author**: Fernando Monsalve
-**Course**: CS50W 2024
+**Course**: CS50 Web Programming with Python and JavaScript
 **Project**: Final Capstone - Quality Management System
